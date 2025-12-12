@@ -19,14 +19,19 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'python -m pip install --upgrade pip'
-                sh 'pip install -r requirements.txt'
+                sh '''
+                python -m pip install --upgrade pip
+                pip install --no-cache-dir -r requirements.txt
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest -q'
+                sh '''
+                export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+                pytest -q
+                '''
             }
         }
 
@@ -38,8 +43,10 @@ pipeline {
 
         stage('Run Docker Container') {
             steps {
-                sh 'docker rm -f oruk-app || true'
-                sh "docker run -d --name oruk-app -p 5000:5000 ${IMAGE_NAME}"
+                sh '''
+                docker rm -f oruk-app || true
+                docker run -d --name oruk-app -p 5000:5000 ${IMAGE_NAME}
+                '''
             }
         }
     }
