@@ -1,10 +1,13 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'python:3.11-slim'   // Python installed
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
     environment {
         IMAGE_NAME = "dockerhubusername/oruk-app:latest"
     }
-
     stages {
         stage('Clone Repository') {
             steps {
@@ -14,8 +17,8 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'python3 -m pip install --upgrade pip'
-                sh 'pip3 install -r requirements.txt'
+                sh 'python -m pip install --upgrade pip'
+                sh 'pip install -r requirements.txt'
             }
         }
 
