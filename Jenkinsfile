@@ -1,5 +1,10 @@
 pipeline {
-    agent any  // Use a normal Jenkins node with Docker installed
+    agent {
+        docker {
+            image 'python:3.11' // full image with pip included
+            args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     environment {
         IMAGE_NAME = "dockerhubusername/oruk-app:latest"
@@ -15,8 +20,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                python3 -m pip install --upgrade pip
-                pip3 install --no-cache-dir -r requirements.txt
+                pip install --upgrade pip
+                pip install --no-cache-dir -r requirements.txt
                 '''
             }
         }
