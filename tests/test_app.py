@@ -1,6 +1,7 @@
-from src import app
+from src.app import app
+
 def test_index():
     client = app.test_client()
-    resp = client.get("/")
-    assert resp.status_code == 200
-    assert b"Hello from Flask" in resp.data
+    response = client.get("/")
+    assert response.status_code == 200
+    assert b"Hello from Flask" in response.data
