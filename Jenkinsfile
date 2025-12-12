@@ -1,13 +1,15 @@
 pipeline {
     agent {
         docker {
-            image 'python:3.11-slim'   // Python installed
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
+            image 'python:3.11-slim'
+            args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
+
     environment {
         IMAGE_NAME = "dockerhubusername/oruk-app:latest"
     }
+
     stages {
         stage('Clone Repository') {
             steps {
